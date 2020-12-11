@@ -1,4 +1,5 @@
 import argparse
+import liveticker
 
 
 def read_source_code(filename: str) -> list[str]:
@@ -14,8 +15,9 @@ def transform_code(lines: list[str]) -> str:
 
     for line in lines:
         source += "\n" + "\t" * indentation
-        if "says" in line:
-            source += 'print("' + line[line.find("says") + 6:len(line) - 1] + '")'
+        a, b = liveticker.translate_string(line)
+        source += a
+        indentation += b
 
     return source
 
@@ -27,4 +29,5 @@ if __name__ == "__main__":
 
     content = read_source_code(args.file)
     code = transform_code(content)
+    print(code)
     exec(code)
